@@ -7,7 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleDrive;
 import frc.robot.commands.auton.Autos;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Infeed;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterHood;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.File;
@@ -32,8 +37,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+    private final Climber climber = Climber.getInstance();
+    private final ShooterHood shooterHood = ShooterHood.getinstance();
+    private final Shooter shooter = Shooter.getInstance();
     private final SwerveSubsystem swerveSubsystem = SwerveSubsystem
             .getInstance(new File(Filesystem.getDeployDirectory(), "swerve"));
+    private final Conveyer conveyer = Conveyer.getInstance();
+    private final Infeed infeed = Infeed.getInstance();
     private final Limelight limelight = Limelight.getInstance();
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
@@ -77,10 +87,24 @@ public class RobotContainer {
                 () -> MathUtil.applyDeadband(-m_driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
                 () -> MathUtil.applyDeadband(-m_driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
                 () -> MathUtil.applyDeadband(-m_driverController.getRightX(), OperatorConstants.LEFT_X_DEADBAND),
-                () -> true, false, false/*DON'T USE TRUE!! */, this::getScalar));
+                () -> true, false, false/* DON'T USE TRUE!! */, this::getScalar));
 
         m_driverController.start().onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
         m_driverController.x().whileTrue(swerveSubsystem.xxDrivexx());
+        m_driverController.leftTrigger().onTrue(infeed.runInfeedCommand(.85)).onFalse(infeed.stopInfeedCommand());
+        //m_driverController.y().onTrue(conveyer.runConveyerCommand(.85)).onFalse(conveyer.stopConveyerCommand());
+        //m_driverController.rightBumper().onTrue(infeed.runInfeedCommand(-.85)).onFalse(infeed.stopInfeedCommand());
+        m_driverController.rightBumper().onTrue(climber.runGrippySolenoidCommand());
+        m_driverController.leftBumper().onTrue(infeed.setInfeedDownCommand(!infeed.getInfeedDown()));
+        //m_driverController.x().onTrue(shooter.runShooterCommand(.75)).onFalse(shooter.stopShooterCommand());
+        //m_driverController.a().onTrue(shooterHood.runShooterHoodMotorCommand(.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        //m_driverController.b().onTrue(shooterHood.runShooterHoodMotorCommand(-.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        m_driverController.a().onTrue(shooterHood.setShooterHoodPositionCommand(15));
+        m_driverController.b().onTrue(shooterHood.setShooterHoodPositionCommand(0));
+        m_driverController.x().onTrue(climber.setClimberMotorPositionCommand(2));
+        m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(-140));
+        //m_driverController.x().onTrue(climber.runClimberMotorsCommand(.5)).onFalse(climber.stopClimberMotorsCommand());
+        //m_driverController.y().onTrue(climber.runClimberMotorsCommand(-.5)).onFalse(climber.stopClimberMotorsCommand());
     }
 
     private double getScalar() {
