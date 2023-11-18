@@ -6,6 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleDrive;
+import frc.robot.commands.Climber.CurrentZero;
+import frc.robot.commands.Climber.CurrentZeroLeft;
+import frc.robot.commands.Climber.CurrentZeroRight;
 import frc.robot.commands.auton.Autos;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyer;
@@ -24,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -90,21 +94,23 @@ public class RobotContainer {
                 () -> true, false, false/* DON'T USE TRUE!! */, this::getScalar));
 
         m_driverController.start().onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
-        m_driverController.x().whileTrue(swerveSubsystem.xxDrivexx());
+        // m_driverController.x().whileTrue(swerveSubsystem.xxDrivexx());
         m_driverController.leftTrigger().onTrue(infeed.runInfeedCommand(.85)).onFalse(infeed.stopInfeedCommand());
-        //m_driverController.y().onTrue(conveyer.runConveyerCommand(.85)).onFalse(conveyer.stopConveyerCommand());
-        //m_driverController.rightBumper().onTrue(infeed.runInfeedCommand(-.85)).onFalse(infeed.stopInfeedCommand());
+        // m_driverController.y().onTrue(conveyer.runConveyerCommand(.85)).onFalse(conveyer.stopConveyerCommand());
+        // m_driverController.rightBumper().onTrue(infeed.runInfeedCommand(-.85)).onFalse(infeed.stopInfeedCommand());
         m_driverController.rightBumper().onTrue(climber.runGrippySolenoidCommand());
         m_driverController.leftBumper().onTrue(infeed.setInfeedDownCommand(!infeed.getInfeedDown()));
-        //m_driverController.x().onTrue(shooter.runShooterCommand(.75)).onFalse(shooter.stopShooterCommand());
-        //m_driverController.a().onTrue(shooterHood.runShooterHoodMotorCommand(.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
-        //m_driverController.b().onTrue(shooterHood.runShooterHoodMotorCommand(-.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
-        m_driverController.a().onTrue(shooterHood.setShooterHoodPositionCommand(15));
+        // m_driverController.x().onTrue(shooter.runShooterCommand(.75)).onFalse(shooter.stopShooterCommand());
+        // m_driverController.a().onTrue(shooterHood.runShooterHoodMotorCommand(.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        // m_driverController.b().onTrue(shooterHood.runShooterHoodMotorCommand(-.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        //m_driverController.a().onTrue(shooterHood.setShooterHoodPositionCommand(15));
         m_driverController.b().onTrue(shooterHood.setShooterHoodPositionCommand(0));
         m_driverController.x().onTrue(climber.setClimberMotorPositionCommand(2));
-        m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(-140));
-        //m_driverController.x().onTrue(climber.runClimberMotorsCommand(.5)).onFalse(climber.stopClimberMotorsCommand());
-        //m_driverController.y().onTrue(climber.runClimberMotorsCommand(-.5)).onFalse(climber.stopClimberMotorsCommand());
+        m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(140));
+        m_driverController.a().onTrue(new CurrentZero(climber));  
+       
+        //m_driverController.x().onTrue(climber.runClimberMotorsCommand(-.1)).onFalse(climber.stopClimberMotorsCommand());
+        //m_driverController.y().onTrue(climber.runClimberMotorsCommand(.1)).onFalse(climber.stopClimberMotorsCommand());
     }
 
     private double getScalar() {

@@ -31,7 +31,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private static SwerveSubsystem instance;
     /** Creates a new SwerveSubsystem. */
     private SwerveSubsystem(File directory) {
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
         try {
             swerveDrive = new SwerveParser(directory).createSwerveDrive();
         } catch (IOException e) {

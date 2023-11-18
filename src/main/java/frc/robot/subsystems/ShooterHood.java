@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.swing.text.Position;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -31,6 +29,7 @@ public class ShooterHood extends SubsystemBase {
     hoodPID = shooterHoodMotor.getPIDController();
     hoodPID.setP(.1);
     hoodPID.setFeedbackDevice(shooterHoodEncoder);
+    
   }
 
   private void runShooterHoodMotor(double speed) {
