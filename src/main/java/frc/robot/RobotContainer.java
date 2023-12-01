@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleDrive;
-import frc.robot.commands.Climber.CurrentZero;
+import frc.robot.commands.Climber.VelocityZero;
 import frc.robot.commands.Climber.CurrentZeroLeft;
 import frc.robot.commands.Climber.CurrentZeroRight;
 import frc.robot.commands.auton.Autos;
@@ -53,7 +53,7 @@ public class RobotContainer {
     private final CommandXboxController m_driverController = new CommandXboxController(
             OperatorConstants.kDriverControllerPort);
 
-    private final SendableChooser<CommandBase> autonChooser = new SendableChooser<>();
+    private final SendableChooser<Command> autonChooser = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -65,10 +65,7 @@ public class RobotContainer {
     }
 
     private void initAutonChooser() {
-        autonChooser.setDefaultOption("not gayyyyy", Autos.notGayAuto(swerveSubsystem));
-        autonChooser.addOption("e ^ i * pi = -1", Autos.eAuto(swerveSubsystem));
-        autonChooser.addOption("not gay with map", Autos.notGayEventMapAuto(swerveSubsystem));
-        autonChooser.addOption("e2", Autos.e2Path(swerveSubsystem, limelight));
+        autonChooser.setDefaultOption("Zesty Path", Autos.zestyPath(swerveSubsystem, climber));
         SmartDashboard.putData("Auto Choices", autonChooser);
     }
 
@@ -107,7 +104,7 @@ public class RobotContainer {
         m_driverController.b().onTrue(shooterHood.setShooterHoodPositionCommand(0));
         m_driverController.x().onTrue(climber.setClimberMotorPositionCommand(2));
         m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(140));
-        m_driverController.a().onTrue(new CurrentZero(climber));  
+        m_driverController.a().onTrue(new VelocityZero(climber));  
        
         //m_driverController.x().onTrue(climber.runClimberMotorsCommand(-.1)).onFalse(climber.stopClimberMotorsCommand());
         //m_driverController.y().onTrue(climber.runClimberMotorsCommand(.1)).onFalse(climber.stopClimberMotorsCommand());

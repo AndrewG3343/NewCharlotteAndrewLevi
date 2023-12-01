@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class CurrentZero extends CommandBase {
+public class VelocityZero extends CommandBase {
   Climber m_climber;
   Timer m_timer;
   /** Creates a new CurrentZeroLeft. */
-  public CurrentZero(Climber climber) {
+  public VelocityZero(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
     m_timer = new Timer();
