@@ -65,7 +65,8 @@ public class RobotContainer {
     }
 
     private void initAutonChooser() {
-        autonChooser.setDefaultOption("Zesty Path", Autos.zestyPath(swerveSubsystem, climber));
+        autonChooser.setDefaultOption("ZestyPath", Autos.zestyPath(swerveSubsystem, climber));
+        autonChooser.addOption("ZestyInfeed", Autos.zestyInfeedPath(swerveSubsystem, infeed, shooter, conveyer));
         SmartDashboard.putData("Auto Choices", autonChooser);
     }
 
@@ -93,18 +94,18 @@ public class RobotContainer {
         m_driverController.start().onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
         // m_driverController.x().whileTrue(swerveSubsystem.xxDrivexx());
         m_driverController.leftTrigger().onTrue(infeed.runInfeedCommand(.85)).onFalse(infeed.stopInfeedCommand());
-        // m_driverController.y().onTrue(conveyer.runConveyerCommand(.85)).onFalse(conveyer.stopConveyerCommand());
-        // m_driverController.rightBumper().onTrue(infeed.runInfeedCommand(-.85)).onFalse(infeed.stopInfeedCommand());
-        m_driverController.rightBumper().onTrue(climber.runGrippySolenoidCommand());
+        m_driverController.y().onTrue(conveyer.runConveyerCommand(.85)).onFalse(conveyer.stopConveyerCommand());
+        m_driverController.rightBumper().onTrue(infeed.runInfeedCommand(-.85)).onFalse(infeed.stopInfeedCommand());
+        //m_driverController.rightBumper().onTrue(climber.runGrippySolenoidCommand());
         m_driverController.leftBumper().onTrue(infeed.setInfeedDownCommand(!infeed.getInfeedDown()));
-        // m_driverController.x().onTrue(shooter.runShooterCommand(.75)).onFalse(shooter.stopShooterCommand());
-        // m_driverController.a().onTrue(shooterHood.runShooterHoodMotorCommand(.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
-        // m_driverController.b().onTrue(shooterHood.runShooterHoodMotorCommand(-.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        m_driverController.x().onTrue(shooter.runShooterCommand(.75)).onFalse(shooter.stopShooterCommand());
+        //m_driverController.a().onTrue(shooterHood.runShooterHoodMotorCommand(.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
+        //m_driverController.b().onTrue(shooterHood.runShooterHoodMotorCommand(-.05)).onFalse(shooterHood.stopShooterHoodMotorCommand());
         //m_driverController.a().onTrue(shooterHood.setShooterHoodPositionCommand(15));
         m_driverController.b().onTrue(shooterHood.setShooterHoodPositionCommand(0));
-        m_driverController.x().onTrue(climber.setClimberMotorPositionCommand(2));
-        m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(140));
-        m_driverController.a().onTrue(new VelocityZero(climber));  
+        //m_driverController.x().onTrue(climber.setClimberMotorPositionCommand(2));
+        //m_driverController.y().onTrue(climber.setClimberMotorPositionCommand(140));
+        //m_driverController.a().onTrue(new VelocityZero(climber));  
        
         //m_driverController.x().onTrue(climber.runClimberMotorsCommand(-.1)).onFalse(climber.stopClimberMotorsCommand());
         //m_driverController.y().onTrue(climber.runClimberMotorsCommand(.1)).onFalse(climber.stopClimberMotorsCommand());
